@@ -105,7 +105,7 @@ def main():
 
 	# set simulation time
 	tmin = 0
-	tmax = 40
+	tmax = 20
 	dt = 0.01 # time step
 	t = np.arange(tmin, tmax, dt) # the simulation time
 
@@ -121,96 +121,25 @@ def main():
 	Phi = lambda t: Omega*t
 	B = [1.00465019, 1.4795114, 3.92223887, 3.99427941, 4.8777141, 2.59484127, 3.6070913, 4.51140533, 3.38070504, 3.65192458]
 
+	# the parameters of the system of oscillators
 	nf = np.size(A, 0) # number of fireflies
 	w = 0.4611143833383792*np.ones(nf) # the natural frequencies of the oscillators
 	
 	
 
-	# solve the system and plot the time evolution 
+	# solve the system and plot the time evolution and the corresponding correlation values
 	sol, corr_vals = solve_system(t, w, A, B, Phi, True)
-	plot_time_evolution(sol, t)
+	plot_time_corr(G, sol, corr_vals, t)
 
-	# plot the correlation values for the system
-	plot_corr_vals(corr_vals, t)
-
-	# compute and plot the sum of the correlation matrices, 
+	# compute and plot the sum of the correlation matrices and 
+	# the time to syncronization in the DCM matrix, 
 	# averaged over no_runs runs
 	sum_rho_avg = sum_correlation_matrices(no_runs, t, w, A, B, Phi)
-	
-
 	D_average = time_to_sync_matrix(no_runs, t, w, A, B, Phi)
 	plot_corr_mat_dcm(G, sum_rho_avg, D_average, no_runs)
 
+	print("--- Execution time: %s seconds ---" % (time.time() - start_time))
 	plt.show()
-
-
-	# f = system_generator(w, A, nf) # generate the system of ODEs for the given parameters
-	# rho_average = np.zeros((nf, nf))
-	# D_average = np.zeros((nf, nf))
-
-	# for idx in trange(no_runs):
-
-	# 	init = np.random.uniform(0, 2*np.pi, nf) % (2*np.pi) # restricting the angles to the unit circle
-
-	# 	sol = odeint(f, init, t).T
-	# 	sol = sol % (2*np.pi)
-
-	# 	rho_sum = np.zeros((nf, nf))
-	# 	corr_vals = np.zeros((nf*nf, np.size(sol, 1)))
-	# 	D = np.zeros((nf, nf))
-	# 	T = 0.95 # synchronization threshold 
-	# 	# computing correlation matrix & the dynamic connectivity matrix
-	# 	for i in range(np.size(sol, 1)):
-	# 		rho_t = correlationMatrix(sol[:, i])
-	# 		corr_vals[:, i] = rho_t.flatten()
-	# 		rho_sum += rho_t
-	# 		idx = np.argwhere(rho_t > T)
-	# 		for j in idx:
-	#  			if D[tuple(j)] == 0:
-	#  				D[tuple(j)] = t[i]
-
-	# 	rho_average += rho_sum
-	# 	D_average += D
-
-	# rho_average = rho_average/no_runs
-	# D_average = D_average/no_runs
-
-	# plt.figure(3)
-	# for i in range(nf*nf):
-	# 	plt.plot(corr_vals[i, :])
-	# plt.xlabel('t')
-	# plt.ylabel('correlation values')
-	# plt.savefig('images/corrValAvg.png')
-	# plt.savefig('images/corrValAvg.pdf')
-
-	# # plot the sum of the correlation matrix
-	# plt.figure(2)
-	# plt.subplot(121)
-	# plot_graph(G)
-	# plt.subplot(122)
-	# plt.imshow(rho_average, 
-	# 	cmap = plt.cm.coolwarm, 
-	# 	interpolation='nearest')
-	# plt.colorbar()
-	# plt.suptitle('Correlation matrix (average over %s runs)' % (no_runs))
-	# plt.savefig('images/corrMatAvg.png')
-	# plt.savefig('images/corrMatAvg.pdf')
-
-	# # plotting the average dynamic connectivity matrix
-	# plt.figure(5)
-	# plt.subplot(121)
-	# plot_graph(G)
-	# plt.subplot(122)
-	# plt.imshow(D_average, 
-	# 	cmap = plt.cm.coolwarm, 
-	# 	interpolation='nearest')
-	# plt.colorbar()
-	# plt.suptitle('Time to sync in dcm (average over %s runs)' % (no_runs))
-	# plt.savefig('images/dcaAvg.png')
-	# plt.savefig('images/dcaAvg.pdf')
-
-	# print("--- Execution time: %s seconds ---" % (time.time() - start_time))
-	
 
 	
 
