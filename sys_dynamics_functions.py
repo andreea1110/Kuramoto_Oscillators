@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib as mpl
-from cairocffi import *
 from scipy.integrate import odeint
 import networkx as nx
 import time
