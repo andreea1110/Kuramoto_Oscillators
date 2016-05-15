@@ -14,8 +14,6 @@ def load_2cluster_network():
 	(7, 9), (8, 10), (8, 9), (7, 10), (9, 10), (10, 11), 
 	(11, 12), (10, 12), (6, 2), (6, 3), (6, 1), (9, 11), (9, 12), (4, 6), (11, 7)]
 	G.add_edges_from(edges_list)
-	print(nx.number_of_nodes(G))
-	print(nx.number_of_edges(G))
 	return G
 
 def load_3cluster_network():
@@ -30,8 +28,6 @@ def load_3cluster_network():
 	(5, 7), (5, 6), (5, 8), (6, 7), (6, 8), (7, 8), (7, 9), (9, 10), 
 	(9, 11), (9, 12), (10, 11), (10, 12), (11, 12)]
 	G.add_edges_from(edges_list)
-	print(nx.number_of_nodes(G))
-	print(nx.number_of_edges(G))
 	return G
 
 
@@ -62,7 +58,17 @@ def load_arenas_graph():
 
 def load_barbell_graph(size=4):
 	""" Generate two complete graphs of the given size, 
-		connected by a path
+		connected by a path.
 	"""
 	G = nx.barbell_graph(size, 0)
+	return G
+
+def load_simple_network():
+	""" Generate graph with 2 nodes and 1 edge.
+	"""
+	G = nx.Graph()
+	for i in range(2):
+		G.add_node(i)
+	edges_list = [(0, 1)]
+	G.add_edges_from(edges_list)
 	return G
