@@ -53,7 +53,7 @@ def reconstruct_coefs(t, Omega_vec, omega, A, B):
 				row = np.append(row, np.sin(phi[i] - phi[j]))
 
 			row = np.append(row, np.sin(phi[i]))
-			M[idx*2 + i, i*nf : i*nf + nf] = row
+			M[idx*nf + i, i*nf : i*nf + nf] = row
 
 	evals = np.linalg.eigvals(np.array(M).T.dot(M))
 	cn = abs(max(evals) / min(evals))
@@ -105,20 +105,20 @@ def main():
 	# the parameters of the external driver
 	Omega = 0.3
 	Phi = lambda t: Omega*t
-	B = np.random.uniform(0, 5, size=nf)
+	B = np.array([0.1, 10, 0.1, 0.1])
+	#B = np.random.uniform(0, 5, size=nf)
 	#B = np.array([7, 0])
 	#B = [1.00465019, 1.4795114, 3.92223887, 3.99427941, 4.8777141, 2.59484127, 3.6070913, 4.51140533, 3.38070504, 3.65192458]
 	
 	
 	# solve the system and plot the time evolution and the corresponding correlation values
 	sol, corr_vals = solve_system(t, w, A, B, Phi, True)
-	#plot_time_corr(G, sol, corr_vals, Omega, t)
+	plot_time_corr(G, sol, corr_vals, Omega, t)
 
 	phi = compute_phase_diffs(sol, t, Omega)
-	print(phi)
 
 	#Omega_vec = np.array([0.3, 0.5, 1.3, 1.7, 2.0])
-	Omega_vec = np.linspace(0.3, 2.0, 40)
+	Omega_vec = np.linspace(0.3, 2.0, 10)
 	reconstruct_coefs(t, Omega_vec, w, A, B)
 
 	plt.figure()
