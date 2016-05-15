@@ -67,8 +67,8 @@ def load_simple_network():
 	""" Generate graph with 2 nodes and 1 edge.
 	"""
 	G = nx.Graph()
-	for i in range(2):
+	for i in range(4):
 		G.add_node(i)
-	edges_list = [(0, 1)]
+	edges_list = [(0, 1), (1, 2), (1, 3)]
 	G.add_edges_from(edges_list)
 	return G
