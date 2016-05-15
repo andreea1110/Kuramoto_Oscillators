@@ -32,12 +32,14 @@ def plot_corr_vals(corr_vals, t, ax):
 	ax.set_ylabel('correlation values')
 
 
-def plot_time_evolution(sol, t, ax):
+def plot_time_evolution(sol, t, Omega, ax):
 	""" Plot the time evolution of the system
 	"""
+	Phi = lambda t: Omega*t
 	nf = np.size(sol, 0)
-	for i in range(1, nf):
+	for i in range(nf):
 		ax.plot(t, sol[i, :], label = "f %d" % (i))
+	ax.plot(t, (Phi(t) % (2*np.pi)), linewidth=2, color='r', label = "driver")
 	ax.legend(loc = 'upper right', prop = {'size':7})
 	ax.set_xlabel("t")
 	ax.set_ylabel(r"$\theta$")
@@ -91,14 +93,14 @@ def plot_corr_mat_dcm(G, sum_rho_avg, D_average, no_runs):
 	plt.savefig('images/corrMat_dcm.png')
 	plt.savefig('images/corrMat_dcm.pdf')
 
-def plot_time_corr(G, sol, corr_vals, t):
+def plot_time_corr(G, sol, corr_vals, Omega, t):
 	""" Plot the time evolution (as time series and as heat-map), together
 		with the corresponding correlation values between each of the nodes
 	"""
 	plt.figure()
 	gs = mpl.gridspec.GridSpec(2, 2)
 	plot_graph(G, plt.subplot(gs[0, 0]))
-	plot_time_evolution(sol, t, plt.subplot(gs[0, 1]))
+	plot_time_evolution(sol, t, Omega, plt.subplot(gs[0, 1]))
 	plot_corr_vals(corr_vals, t, plt.subplot(gs[1, 1]))
 	plot_heatmap_evolutions(sol, t, plt.subplot(gs[1, 0]))
 	plt.savefig('images/time_corr.png')
