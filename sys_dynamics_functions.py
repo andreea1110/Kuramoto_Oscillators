@@ -40,6 +40,7 @@ def solve_system(t, w, A, B, Phi, correlations = False):
 			corr_vals[:, i] = rho_t.flatten()
 		return sol, corr_vals
 
+
 def correlation_matrix(theta_t):
 	""" Compute the corelation matrix at one point in time
 	"""
