@@ -9,8 +9,6 @@ from plotting_functions import*
 from network_generator import*
 from reconstruction import*
 
-
-
 def main():
 	""" Main program.
 	"""

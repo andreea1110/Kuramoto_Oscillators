@@ -64,7 +64,7 @@ def load_barbell_graph(size=4):
 	return G
 
 def load_simple_network():
-	""" Generate graph with 2 nodes and 1 edge.
+	""" Generate symmetric graph with 4 nodes and 3 edge.
 	"""
 	G = nx.Graph()
 	for i in range(4):
