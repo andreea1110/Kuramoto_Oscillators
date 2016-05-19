@@ -8,6 +8,22 @@ from tqdm import trange
 from plotting_functions import*
 from network_generator import*
 from reconstruction import*
+from visualization import*
+
+
+class DictWrapper(dict):
+	"""
+	Dict with dot-notation access functionality
+	Note: Class borrowed from Kim :-)
+	"""
+	def __getattr__(self, attr):
+		if not attr in self:
+			raise KeyError('{} not in {}'.format(attr, self.keys()))
+
+		return self.get(attr)
+
+	__setattr__ = dict.__setitem__
+	__delattr__ = dict.__delitem__
 
 def main():
 	""" Main program.
@@ -23,13 +39,13 @@ def main():
 	no_runs = 1 # number of times the simulation is run (used where applicable)
 
 	# load network of oscillators
-	G = load_simple_network()
+	G = load_line_network(5)
 
 	#G = nx.gnp_random_graph(5, 0.6)
 	#A = nx.adjacency_matrix(G).todense()
 	A = nx.to_numpy_matrix(G)
 	nz = np.nonzero(A)
-	A[nz] = np.random.uniform(0.5, 3, size=len(nz[0]))
+	#A[nz] = np.random.uniform(2, 5, size=len(nz[0]))
 	
 
 	# the parameters of the system of oscillators
@@ -42,9 +58,9 @@ def main():
 	Phi = lambda t: Omega*t
 	#B = np.array([2, 10, 5, 8])
 	#B = np.linspace(10, 20, nf)
-	B = np.random.uniform(10, 20, size=nf)
+	#B = np.random.uniform(10, 20, size=nf)
 	#B = np.random.uniform(0, 5, size=nf)
-	#B = np.array([7, 0])
+	B = np.array([7, 0, 0, 0, 0])
 	#B = [1.00465019, 1.4795114, 3.92223887, 3.99427941, 4.8777141, 2.59484127, 3.6070913, 4.51140533, 3.38070504, 3.65192458]
 	
 	
@@ -59,6 +75,15 @@ def main():
 	Omega_vec = [2.9,3.05,3.1,3.2]
 	Arec, Brec = reconstruct_coeffs_mask(t, Omega_vec, w, A, B)
 	compute_reconstruction_error(A, B, Arec, Brec)
+
+	bundle = DictWrapper({
+		'orig_A': A,
+		'orig_B': B,
+		'rec_A': Arec,
+		'rec_B': Brec
+	})
+
+	show_reconstruction_overview(sol, bundle)
 
 	plt.figure()
 	gs = mpl.gridspec.GridSpec(1, 1)
