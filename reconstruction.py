@@ -40,6 +40,7 @@ def reconstruct_coeffs(t, Omega_vec, omega, A, B):
 		Phi = lambda t: Omega*t
 		sol = solve_system(t, omega, A, B, Phi)
 		phi = compute_phase_diffs(sol, t, Omega)
+		print("phi = ", phi)
 		for i in range(nf):
 			row = np.array([])
 			for j in range(nf):
@@ -50,10 +51,14 @@ def reconstruct_coeffs(t, Omega_vec, omega, A, B):
 			row = np.append(row, np.sin(phi[i]))
 			M[idx*nf + i, i*nf : i*nf + nf] = row
 
-	evals = np.linalg.eigvals(np.array(M).T.dot(M))
+
+	MM = np.array(M).T.dot(M)
+	evals = np.linalg.eigvals(np.sqrt(np.array(MM).T.dot(MM)))
 	cn = abs(max(evals) / min(evals))
 	print('Condition number:', cn, np.log10(cn))
-	
+
+
+	print("M = ", M)
 	x = np.linalg.lstsq(M, b)[0]
 
 	x = np.reshape(x, (nf, nf))
@@ -109,6 +114,7 @@ def reconstruct_coeffs_mask(t, Omega_vec, omega, A, B):
 	cn = abs(max(evals) / min(evals))
 	print('Condition number:', cn, np.log10(cn))
 
+	print("M = ", M)
 	x = np.linalg.lstsq(M, b)[0]
 
 	x = np.reshape(x, (nf, nf))
