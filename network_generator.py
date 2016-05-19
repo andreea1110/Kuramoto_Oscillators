@@ -67,8 +67,21 @@ def load_simple_network():
 	""" Generate symmetric graph with 4 nodes and 3 edge.
 	"""
 	G = nx.Graph()
-	for i in range(4):
+	for i in range(3):
 		G.add_node(i)
-	edges_list = [(0, 1), (1, 2), (1, 3)]
+	edges_list = [(0, 1), (1, 2)]
+	G.add_edges_from(edges_list)
+	return G
+
+def load_line_network(size=5):
+	""" Generate a line network of given size.
+	"""
+	G = nx.Graph()
+	for i in range(size):
+		G.add_node(i)
+	edges_list = []
+	for i in range(size-1):
+		edges_list.append((i, i+1))
+	print("edges_list = ", edges_list)
 	G.add_edges_from(edges_list)
 	return G
